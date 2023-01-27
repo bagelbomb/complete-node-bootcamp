@@ -1,0 +1,22 @@
+{
+  "name": "node-farm",
+  "version": "1.0.0",
+  "description": "First application in Node.js course",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bagelbomb/complete-node-bootcamp.git"
+  },
+  "author": "Tanner Iverson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bagelbomb/complete-node-bootcamp/issues"
+  },
+  "homepage": "https://github.com/bagelbomb/complete-node-bootcamp#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

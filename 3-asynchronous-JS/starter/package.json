@@ -1,0 +1,25 @@
+{
+  "name": "asynchronous-js",
+  "version": "1.0.0",
+  "description": "Third application in Node.js course",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bagelbomb/complete-node-bootcamp.git"
+  },
+  "author": "Tanner Iverson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bagelbomb/complete-node-bootcamp/issues"
+  },
+  "homepage": "https://github.com/bagelbomb/complete-node-bootcamp#readme",
+  "dependencies": {
+    "superagent": "^8.0.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
+}

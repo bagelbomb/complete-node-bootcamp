@@ -6,6 +6,13 @@ const handleCastErrorDB = err => {
   return new AppError(message, 400);
 };
 
+const handleDuplicateReviewDB = () => {
+  const message =
+    'You have already created a review on this tour. You can only create one review per tour.';
+
+  return new AppError(message, 400);
+};
+
 const handleDuplicateFieldsDB = err => {
   const value = err.message.match(/"(.*?)"/)[0];
   const message = `Duplicate field value: ${value}. Please use another value.`;
@@ -69,7 +76,11 @@ module.exports = (err, req, res, next) => {
     }
 
     if (err.code === 11000) {
-      prodError = handleDuplicateFieldsDB(err);
+      if (err.message.includes('tour_1_user_1')) {
+        prodError = handleDuplicateReviewDB();
+      } else {
+        prodError = handleDuplicateFieldsDB(err);
+      }
     }
 
     if (err.name === 'ValidationError') {

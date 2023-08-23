@@ -1,28 +1,28 @@
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const filterObj = require('../utils/filterObject');
+const controllerFactory = require('./controllerFactory');
 
-const filterObj = (obj, ...allowedFields) => {
-  const filteredObj = {};
-
-  allowedFields.forEach(field => {
-    if (obj[field]) {
-      filteredObj[field] = obj[field];
-    }
+// CRUD Operations:
+exports.createUser = (req, res) => {
+  // TODO: Actually define this (for admins) or get rid of it
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not defined. Please use /signup instead.',
   });
-
-  return filteredObj;
 };
+exports.getAllUsers = controllerFactory.getAll(User);
+exports.getUser = controllerFactory.getOne(User);
+exports.updateUser = controllerFactory.updateOne(User); // Do not update passwords with this
+exports.deleteUser = controllerFactory.deleteOne(User);
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
+// For GET /me:
+exports.setUserId = (req, res, next) => {
+  req.params.id = req.user._id;
 
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: { users },
-  });
-});
+  next();
+};
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
@@ -64,86 +64,3 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
-
-// exports.getUser = (req, res) => {
-//   const user = users.find(u => u._id === req.params.id);
-
-//   res.status(200).json({
-//     status: 'success',
-//     data: { user },
-//   });
-// };
-
-// exports.createUser = (req, res) => {
-//   const newUser = { ...req.body };
-
-//   users.push(newUser);
-
-//   fs.writeFile(
-//     `${__dirname}/../dev-data/data/users.json`,
-//     JSON.stringify(users),
-//     err => {
-//       res.status(201).json({
-//         status: 'success',
-//         data: {
-//           user: newUser,
-//         },
-//       });
-//     }
-//   );
-// };
-
-// exports.updateUserPut = (req, res) => {
-//   const userIndex = users.findIndex(u => u._id === req.params.id);
-
-//   users[userIndex] = { ...req.body };
-
-//   fs.writeFile(
-//     `${__dirname}/../dev-data/data/users.json`,
-//     JSON.stringify(users),
-//     err => {
-//       res.status(200).json({
-//         status: 'success',
-//         data: {
-//           user: users[userIndex],
-//         },
-//       });
-//     }
-//   );
-// };
-
-// exports.updateUserPatch = (req, res) => {
-//   const userIndex = users.findIndex(u => u._id === req.params.id);
-
-//   users[userIndex] = { ...users[userIndex], ...req.body };
-
-//   fs.writeFile(
-//     `${__dirname}/../dev-data/data/users.json`,
-//     JSON.stringify(users),
-//     err => {
-//       res.status(200).json({
-//         status: 'success',
-//         data: {
-//           user: users[userIndex],
-//         },
-//       });
-//     }
-//   );
-// };
-
-// exports.deleteUser = (req, res) => {
-//   const userIndex = users.findIndex(u => u._id === req.params.id);
-
-//   users.splice(userIndex, 1);
-
-//   fs.writeFile(
-//     `${__dirname}/../dev-data/data/users.json`,
-//     JSON.stringify(users),
-//     err => {
-//       res.status(204).json({
-//         status: 'success',
-//         data: null,
-//       });
-//     }
-//   );
-// };

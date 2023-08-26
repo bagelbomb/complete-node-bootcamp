@@ -66,6 +66,12 @@ exports.login = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, res);
 });
 
+exports.logout = (req, res) => {
+  res.clearCookie('jwt');
+
+  res.status(200).json({ status: 'success' });
+};
+
 exports.protect = catchAsync(async (req, res, next) => {
   // Check if the token exists:
   let token;
@@ -75,6 +81,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) {
@@ -104,6 +112,34 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // Grant access to protected route:
   req.user = user;
+  res.locals.user = user;
+
+  next();
+});
+
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    // Verify token:
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    // Check if the token's user still exists:
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return next();
+    }
+
+    // Check if the user changed their password after the token was issued:
+    if (user.passwordChangedAfter(decoded.iat)) {
+      return next();
+    }
+
+    // User is logged in; make data available in templates:
+    res.locals.user = user;
+  }
 
   next();
 });

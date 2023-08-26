@@ -33,33 +33,62 @@ const handleJWTInvalidError = () =>
 const handleJWTExpiredError = () =>
   new AppError('Expired token. Please log in again.', 401);
 
-const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    error: err,
+const sendErrorDev = (err, req, res) => {
+  // API
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(err.statusCode).json({
+      status: err.status,
+      error: err,
+      message: err.message,
+      stack: err.stack,
+    });
+  }
+
+  // Rendered Website
+  console.error('ERROR: ', err);
+
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong',
     message: err.message,
-    stack: err.stack,
   });
 };
 
-const sendErrorProd = (err, res) => {
-  if (err.isOperational) {
+const sendErrorProd = (err, req, res) => {
+  // API
+  if (req.originalUrl.startsWith('/api')) {
     // Operational, trusted errors: send message to client
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+      });
+    }
 
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message,
-    });
-  } else {
     // Programming or other unknown error: don't leak error details
-
     console.error('ERROR: ', err);
 
-    res.status(500).json({
+    return res.status(500).json({
       status: 'error',
       message: 'Internal server error',
     });
   }
+
+  // Rendered Website
+  // Operational, trusted errors: send message to client
+  if (err.isOperational) {
+    return res.status(err.statusCode).render('error', {
+      title: 'Something went wrong',
+      message: err.message,
+    });
+  }
+
+  // Programming or other unknown error: don't leak error details
+  console.error('ERROR: ', err);
+
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong',
+    message: 'Please try again later.',
+  });
 };
 
 module.exports = (err, req, res, next) => {
@@ -67,9 +96,9 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
-    let prodError = { ...err };
+    let prodError = { ...err, message: err.message };
 
     if (err.name === 'CastError') {
       prodError = handleCastErrorDB(err);
@@ -95,6 +124,6 @@ module.exports = (err, req, res, next) => {
       prodError = handleJWTExpiredError();
     }
 
-    sendErrorProd(prodError, res);
+    sendErrorProd(prodError, req, res);
   }
 };

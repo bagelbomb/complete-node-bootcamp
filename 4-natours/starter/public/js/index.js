@@ -34,12 +34,17 @@ if (userDataForm) {
     e.preventDefault();
 
     const saveSettingsBtn = document.querySelector('.btn--save-data');
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
 
     saveSettingsBtn.textContent = 'Updating settings...'
 
-    await updateSettings({ name, email }, 'data');
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value)
+    form.append('email', document.getElementById('email').value)
+    form.append('photo', document.getElementById('photo').files[0]);
+
+    // TODO: reflect to the user that a photo has been selected (like changing the label text to the filename)
+
+    await updateSettings(form, 'data');
 
     saveSettingsBtn.textContent = 'Save settings'
   });

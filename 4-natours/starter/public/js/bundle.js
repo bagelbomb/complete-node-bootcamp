@@ -12135,8 +12135,11 @@ var updateSettings = /*#__PURE__*/function () {
         case 4:
           res = _context.sent;
           if (res.data.status === 'success') {
-            message = "".concat(type === 'password' ? 'Password' : 'Settings', " updated successfully!");
+            message = "".concat(type === 'password' ? 'Password' : 'Settings', " updated successfully! Reloading...");
             (0, _alerts.showAlert)('success', message);
+            window.setTimeout(function () {
+              location.reload();
+            }, 1500);
           }
           _context.next = 11;
           break;
@@ -12318,23 +12321,24 @@ if (logoutBtn) {
 if (userDataForm) {
   userDataForm.addEventListener('submit', /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var saveSettingsBtn, name, email;
+      var saveSettingsBtn, form;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             e.preventDefault();
             saveSettingsBtn = document.querySelector('.btn--save-data');
-            name = document.getElementById('name').value;
-            email = document.getElementById('email').value;
             saveSettingsBtn.textContent = 'Updating settings...';
-            _context.next = 7;
-            return (0, _updateSettings.updateSettings)({
-              name: name,
-              email: email
-            }, 'data');
-          case 7:
+            form = new FormData();
+            form.append('name', document.getElementById('name').value);
+            form.append('email', document.getElementById('email').value);
+            form.append('photo', document.getElementById('photo').files[0]);
+
+            // TODO: reflect to the user that a photo has been selected (like changing the label text to the filename)
+            _context.next = 9;
+            return (0, _updateSettings.updateSettings)(form, 'data');
+          case 9:
             saveSettingsBtn.textContent = 'Save settings';
-          case 8:
+          case 10:
           case "end":
             return _context.stop();
         }
@@ -12407,7 +12411,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65404" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37577" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

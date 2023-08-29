@@ -16,7 +16,12 @@ router.use(authController.protect);
 
 // TODO: Refactor these to be RESTful (CRUD on /me route):
 router.get('/me', userController.setUserId, userController.getUser);
-router.patch('/updateMe', userController.updateMe);
+router.patch(
+  '/updateMe',
+  userController.uploadUserPhoto,
+  userController.resizeUserPhoto,
+  userController.updateMe
+);
 router.patch('/updateMyPassword', authController.updateMyPassword);
 router.patch('/deactivateMe', userController.deactivateMe);
 router.delete('/deleteMe', userController.deleteMe);

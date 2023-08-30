@@ -4,7 +4,8 @@
   "description": "Fourth application in Node.js course",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "start:prod": "cross-env NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",
     "importDevData": "node ./dev-data/data/import-dev-data.js",

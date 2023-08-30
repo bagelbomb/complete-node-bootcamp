@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 
+// TODO: add a 'participants' and a 'soldOut' field to each date in 'startDates' and require users to select one of the dates when booking; when 'participants' equals 'maxGroupSize' for a start date, make it unavailable
+
 const tourSchema = new mongoose.Schema(
   {
     name: {

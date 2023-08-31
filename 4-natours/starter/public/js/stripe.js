@@ -7,7 +7,7 @@ export const bookTour = async tourId => {
   try {
     // TODO: move this into config.env?
     const stripe = Stripe(
-      ''
+      'pk_test_51NkX3bHpCjIYpA1vAIovketvoScVip7ooIWAYbnmpvj5TRHysYZoOdrGQ9skT2LybmHLtZJMfgbEWiHXgDLrwJCN00m1VGeYOx'
     );
 
     const res = await axios(`/api/v1/bookings/checkout-session/${tourId}`);

@@ -3,11 +3,11 @@ export const displayMap = locations => {
 
   // TODO: move this into config.env?
   mapboxgl.accessToken =
-    '';
+    'pk.eyJ1IjoiYmFnZWxib21iIiwiYSI6ImNsbHBydWVjOTA4OTEzc3E1YXhpNDBxeW0ifQ.6cNK6I_Shze9Fpy50YhGwQ';
 
   const map = new mapboxgl.Map({
     container: 'map',
-    style: '',
+    style: 'mapbox://styles/bagelbomb/cllpsdrqu00hq01qr2xfyhnfw',
     scrollZoom: false,
   });
 

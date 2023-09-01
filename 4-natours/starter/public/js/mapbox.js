@@ -1,7 +1,6 @@
 export const displayMap = locations => {
   // TODO: install mapbox with npm instead of using script tag?
 
-  // TODO: move this into config.env?
   mapboxgl.accessToken =
     'pk.eyJ1IjoiYmFnZWxib21iIiwiYSI6ImNsbHBydWVjOTA4OTEzc3E1YXhpNDBxeW0ifQ.6cNK6I_Shze9Fpy50YhGwQ';
 

@@ -3,6 +3,7 @@ import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
+import { showAlert } from './alerts';
 
 const mapbox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
@@ -10,6 +11,7 @@ const logoutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
+const alertMessage = document.querySelector('body').dataset.alert;
 
 if (mapbox) {
   const locations = JSON.parse(mapbox.dataset.locations);
@@ -87,6 +89,10 @@ if (bookBtn) {
 
     bookTour(tourId);
   });
+}
+
+if (alertMessage) {
+  showAlert('success', alertMessage, 20);
 }
 
 // TODO: update/replace Parcel/Babel?
